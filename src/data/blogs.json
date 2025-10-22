@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "slug": "react-hooks-best-practices",
+    "title": "React Hooks: Best Practices for Clean Components",
+    "category": "Frontend",
+    "date": "2025-09-20",
+    "author": "Jane Developer",
+    "featuredImage": "https://images.unsplash.com/photo-1523473827534-86c3e83d7b12?q=80&w=1400&auto=format&fit=crop",
+    "description": "Practical patterns for useState, useEffect, and custom hooks to keep your components simple and maintainable.",
+    "content": "# React Hooks: Best Practices\n\nHooks let you reuse stateful logic without changing your component hierarchy. Here are a few practical tips:\n\n## 1. Keep Effects Focused\nSplit effects by responsibility rather than bundling unrelated logic together.\n\n```js\nuseEffect(() => {\n  const id = setInterval(tick, 1000);\n  return () => clearInterval(id);\n}, [tick]);\n```\n\n## 2. Extract Custom Hooks\nIf multiple components share a pattern, extract a hook.\n\n```js\nfunction useLocalStorage(key, initial) {\n  const [value, setValue] = useState(() => {\n    const raw = localStorage.getItem(key);\n    return raw ? JSON.parse(raw) : initial;\n  });\n  useEffect(() => localStorage.setItem(key, JSON.stringify(value)), [key, value]);\n  return [value, setValue];\n}\n```\n\n## 3. Avoid Over-Rendering\nMemoize expensive derived values with `useMemo` and event handlers with `useCallback` only when needed.\n\nHappy hooking!"
+  },
+  {
+    "id": 2,
+    "slug": "nodejs-api-structure",
+    "title": "Structuring a Maintainable Node.js API",
+    "category": "Backend",
+    "date": "2025-08-05",
+    "author": "John Backend",
+    "featuredImage": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1400&auto=format&fit=crop",
+    "description": "A practical folder structure and patterns for building robust Express APIs.",
+    "content": "# Node.js API Structure\n\nDesigning a maintainable API is about boundaries and clarity.\n\n- Use feature-based folders (users, auth, posts).\n- Encapsulate DB access behind repositories.\n- Validate inputs at the edges.\n\n```bash\nproject/\n  src/\n    users/\n      router.js\n      service.js\n      schema.js\n```\n\nShip small, iterate fast."
+  },
+  {
+    "id": 3,
+    "slug": "docker-tips-for-faster-builds",
+    "title": "Docker Tips for Faster Builds",
+    "category": "DevOps",
+    "date": "2025-06-12",
+    "author": "Dev Ops",
+    "featuredImage": "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1400&auto=format&fit=crop",
+    "description": "Speed up Docker builds with caching, multi-stage builds, and smarter .dockerignore files.",
+    "content": "# Faster Docker Builds\n\n- Use multi-stage builds to keep images small.\n- Order steps to maximize layer caching.\n- Add a `.dockerignore` to skip dev junk.\n\n```Dockerfile\nFROM node:20 AS deps\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci\n\nFROM deps AS build\nCOPY . .\nRUN npm run build\n\nFROM nginx:alpine\nCOPY --from=build /app/dist /usr/share/nginx/html\n```"
+  },
+  {
+    "id": 4,
+    "slug": "testing-pyramid-in-practice",
+    "title": "The Testing Pyramid in Practice",
+    "category": "QA",
+    "date": "2025-05-01",
+    "author": "Quality Queen",
+    "featuredImage": "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1400&auto=format&fit=crop",
+    "description": "Balance unit, integration, and E2E tests to get the most value for effort.",
+    "content": "# The Testing Pyramid\n\nAim for many fast unit tests, fewer integration tests, and a handful of E2E cases.\n\n- Mock where helpful, not everywhere.\n- Test behavior, not implementation details.\n- Keep E2E focused on critical paths."
+  },
+  {
+    "id": 5,
+    "slug": "css-utilities-that-actually-help",
+    "title": "CSS Utilities That Actually Help",
+    "category": "Frontend",
+    "date": "2025-07-18",
+    "author": "Jane Developer",
+    "featuredImage": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1400&auto=format&fit=crop",
+    "description": "Modern utility-first CSS strategies to move faster without the mess.",
+    "content": "# CSS Utilities\n\nUtility-first doesn't mean unreadable.\n\n- Group semantic sections with components.\n- Extract common patterns with @apply.\n- Lean on design tokens."
+  },
+  {
+    "id": 6,
+    "slug": "observability-101",
+    "title": "Observability 101: Logs, Metrics, Traces",
+    "category": "DevOps",
+    "date": "2025-03-29",
+    "author": "Ops Coach",
+    "featuredImage": "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1400&auto=format&fit=crop",
+    "description": "The pillars of observability and how to get started without drowning in tools.",
+    "content": "# Observability 101\n\nStart simple:\n\n- Structured logs.\n- Key service metrics.\n- Tracing for critical requests.\n\nPick one tool per pillar and evolve as you grow."
+  },
+  {
+    "id": 7,
+    "slug": "career-notes-for-engineers",
+    "title": "Career Notes for Engineers",
+    "category": "Others",
+    "date": "2025-01-10",
+    "author": "You",
+    "featuredImage": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1400&auto=format&fit=crop",
+    "description": "Lessons learned on communication, ownership, and focus.",
+    "content": "# Career Notes\n\n- Communicate early and often.\n- Own outcomes, not tasks.\n- Protect focus time and say no to noise."
+  },
+  {
+    "id": 8,
+    "slug": "react-bn-shuru-korun",
+    "title": "React দিয়ে শুরু করুন: শুরু থেকে ধারণা",
+    "category": "Frontend",
+    "date": "2025-09-30",
+    "author": "বাংলা লেখক",
+    "featuredImage": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1400&auto=format&fit=crop",
+    "description": "React কী, কেন ব্যবহার করবেন এবং কীভাবে একটি ছোট কম্পোনেন্ট বানাবেন—বাংলায় সংক্ষেপে।",
+    "content": "# React পরিচিতি\n\nReact হলো একটি জাভাস্ক্রিপ্ট লাইব্রেরি যা ইউআই বানাতে সাহায্য করে। কম্পোনেন্ট ভিত্তিক আর্কিটেকচার বলে কোড রিইউজ করা যায়।\n\n## কেন React\n- ডিক্লেয়ারেটিভ ইউআই\n- কম্পোনেন্ট রিইউজ\n- বিশাল ইকোসিস্টেম\n\n```jsx\nfunction Hello({ name }) {\n  return <h1>হ্যালো, {name}!</h1>\n}\n```\n\nউপরের উদাহরণে আমরা একটি সহজ কম্পোনেন্ট দেখলাম যা প্রপস থেকে নাম নিয়ে রেন্ডার করে।\n\n```jsx\nfunction Hello({ name }) {\n  return <h1>হ্যালো, {name}!</h1>\n}\n```\n\n"
+  },
+  {
+    "id": 9,
+    "slug": "productivity-bn-tips",
+    "title": "ডেভেলপার প্রোডাক্টিভিটি: ৫টি অভ্যাস",
+    "category": "Others",
+    "date": "2025-10-01",
+    "author": "বাংলা লেখক",
+    "featuredImage": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1400&auto=format&fit=crop",
+    "description": "ফোকাস, ডিপ ওয়ার্ক, এবং টুলিং—বাংলায় কিছু বাস্তব টিপস।",
+    "content": "# প্রোডাক্টিভিটি টিপস\n\n1. টাইমবক্স করে কাজ করুন।\n2. নোট ও টাস্ক এক জায়গায় রাখুন।\n3. অপ্রয়োজনীয় নোটিফিকেশন বন্ধ রাখুন।\n4. কীবোর্ড শর্টকাট শিখুন।\n5. নিয়মিত রিভিউ করুন।\n\n> ছোট ছোট উন্নতি নিয়মিত করলে বড় ফল পাওয়া যায়।"
+  },
+  {
+    "id": 10,
+    "slug": "typescript-for-large-react-apps",
+    "title": "TypeScript Patterns for Large React Apps",
+    "category": "Frontend",
+    "date": "2025-07-02",
+    "author": "TS Wizard",
+    "featuredImage": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1400&auto=format&fit=crop",
+    "description": "Interfaces, discriminated unions, and generics that keep complex UIs safe.",
+    "content": "# TypeScript Patterns\n\n- Use discriminated unions for state machines.\n- Prefer interfaces for public contracts.\n- Model domain types centrally."
+  },
+  {
+    "id": 11,
+    "slug": "postgres-indexing-essentials",
+    "title": "Postgres Indexing Essentials",
+    "category": "Backend",
+    "date": "2025-04-22",
+    "author": "DB Pro",
+    "featuredImage": "https://images.unsplash.com/photo-1504805572947-34fad45aed93?q=80&w=1400&auto=format&fit=crop",
+    "description": "B-tree vs GIN vs BRIN—when to use which and how to measure.",
+    "content": "# Indexing 101\n\n- Understand query plans.\n- Add the right index, not more indexes.\n- Measure before and after."
+  },
+  {
+    "id": 12,
+    "slug": "kubernetes-deployments-blue-green",
+    "title": "Kubernetes Blue/Green Deployments",
+    "category": "DevOps",
+    "date": "2025-02-17",
+    "author": "Cluster Captain",
+    "featuredImage": "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1400&auto=format&fit=crop",
+    "description": "Ship safely with parallel environments and instant rollbacks.",
+    "content": "# Blue/Green\n\nRun two environments side-by-side and switch traffic when healthy."
+  },
+  {
+    "id": 13,
+    "slug": "playwright-vs-cypress-2025",
+    "title": "Playwright vs Cypress in 2025",
+    "category": "QA",
+    "date": "2025-06-08",
+    "author": "Test Pilot",
+    "featuredImage": "https://images.unsplash.com/photo-1501862700950-18382cd41497?q=80&w=1400&auto=format&fit=crop",
+    "description": "APIs, speed, and reliability—trade-offs for modern E2E testing.",
+    "content": "# PW vs CY\n\nBoth are great. Pick based on ecosystem fit and team skills."
+  },
+  {
+    "id": 14,
+    "slug": "design-systems-tokens",
+    "title": "Design Systems with Tokens",
+    "category": "Frontend",
+    "date": "2025-03-11",
+    "author": "UI Architect",
+    "featuredImage": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1400&auto=format&fit=crop",
+    "description": "Scale design consistently with tokenized styling.",
+    "content": "# Tokens\n\nColor, spacing, and typography as code for consistency."
+  },
+  {
+    "id": 15,
+    "slug": "event-driven-architectures",
+    "title": "Event-Driven Architectures: Practical Guide",
+    "category": "Backend",
+    "date": "2025-05-30",
+    "author": "System Thinker",
+    "featuredImage": "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=1400&auto=format&fit=crop",
+    "description": "Events, topics, and idempotency at scale.",
+    "content": "# EDA\n\nDesign events carefully; version them; ensure consumers are idempotent."
+  },
+  {
+    "id": 16,
+    "slug": "bangla-git-workflow",
+    "title": "গিট ওয়ার্কফ্লো: ফিচার ব্রাঞ্চ থেকে রিলিজ",
+    "category": "Others",
+    "date": "2025-09-10",
+    "author": "বাংলা লেখক",
+    "featuredImage": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1400&auto=format&fit=crop",
+    "description": "প্র্যাকটিক্যাল গাইড: ব্রাঞ্চিং, রিভিউ, এবং রিলিজ কাট।",
+    "content": "# Git Workflow\n\n- main প্রটেক্টেড রাখুন\n- PR রিভিউ বাধ্যতামূলক\n- রিলিজ ট্যাগিং নিয়মিত করুন"
+  },
+  {
+    "id": 17,
+    "slug": "observability-bangla-intro",
+    "title": "অবজারভেবিলিটি: শুরুটা কিভাবে করবেন",
+    "category": "DevOps",
+    "date": "2025-08-14",
+    "author": "বাংলা লেখক",
+    "featuredImage": "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1400&auto=format&fit=crop",
+    "description": "লগ, মেট্রিক, ট্রেস—প্রথম ধাপে কী সেটআপ করবেন।",
+    "content": "# Observability\n\nএকটি সার্ভিস থেকে শুরু করুন এবং ধীরে ধীরে কভারেজ বাড়ান।"
+  },
+  {
+    "id": 18,
+    "slug": "react-performance-2025",
+    "title": "React Performance in 2025: Quick Wins",
+    "category": "Frontend",
+    "date": "2025-10-05",
+    "author": "Jane Developer",
+    "featuredImage": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1400&auto=format&fit=crop",
+    "description": "Memoization, suspense-ready code, and image strategies.",
+    "content": "# Perf\n\n- Memo only when profiling says so\n- Split routes\n- Optimize images"
+  },
+  {
+    "id": 19,
+    "slug": "secure-secrets-management",
+    "title": "Secure Secrets Management 101",
+    "category": "DevOps",
+    "date": "2025-07-21",
+    "author": "Sec Ops",
+    "featuredImage": "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1400&auto=format&fit=crop",
+    "description": "From .env to vaults—picking the right approach.",
+    "content": "# Secrets\n\n- Never commit secrets\n- Rotate regularly\n- Use managed vaults"
+  },
+  {
+    "id": 20,
+    "slug": "qa-test-strategy-blueprint",
+    "title": "QA Test Strategy Blueprint",
+    "category": "QA",
+    "date": "2025-04-03",
+    "author": "Quality Queen",
+    "featuredImage": "https://images.unsplash.com/photo-1501862700950-18382cd41497?q=80&w=1400&auto=format&fit=crop",
+    "description": "Risk-based testing and coverage that matters.",
+    "content": "# Strategy\n\nFocus on high-risk areas and critical paths first."
+  }
+]
