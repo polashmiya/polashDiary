@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import postsData from "../data/blogs.json";
 import { listAllPosts } from "../lib/posts";
 import SmartImage from "../components/SmartImage";
-import DOMPurify from "dompurify";
+import { sanitizeHtml } from "../lib/sanitize";
 import { useAuth } from "../hooks/useAuth";
 import { addComment, listComments, hideComment, deleteComment } from "../lib/comments";
 
@@ -99,7 +99,7 @@ export default function BlogDetails() {
 
       <MotionDiv className="prose prose-slate max-w-none prose-headings:scroll-mt-24" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
         {/^\s*</.test(post.content) ? (
-          <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }} />
+          <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }} />
         ) : (
           <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
             {post.content}

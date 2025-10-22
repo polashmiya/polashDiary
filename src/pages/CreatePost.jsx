@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import PostEditor from "../components/PostEditor";
+import RichTextBox from "../components/RichTextBox";
 import { addPost } from "../lib/posts";
 import { useAuth } from "../hooks/useAuth";
 
@@ -92,8 +92,8 @@ export default function CreatePost() {
         </div>
 
         <div>
-          <div className="block text-sm font-medium text-slate-700 mb-2">Content</div>
-          <PostEditor value={html} onChange={setHtml} />
+            <div className="block text-sm font-medium text-slate-700 mb-2">Content</div>
+            <RichTextBox value={html} onChange={setHtml} />
         </div>
 
         <div className="flex items-center gap-3">
