@@ -30,8 +30,10 @@ export default function SmartImage({
   sizes,
   style,
   imgProps = {},
+  showPlaceholder = true,
 }) {
   const [loaded, setLoaded] = useState(false);
+  const [failed, setFailed] = useState(false);
   const isUns = isUnsplash(src);
 
   const srcSet = useMemo(() => {
@@ -54,21 +56,41 @@ export default function SmartImage({
 
   // Priority images should not be lazy
   const loading = priority ? undefined : "lazy";
-  const fetchpriority = priority ? "high" : undefined;
+  const fetchPriority = priority ? "high" : undefined;
   const decoding = "async";
 
   const ref = useRef(null);
   useEffect(() => {
     if (!ref.current || priority) return;
     const el = ref.current;
-    const handler = () => setLoaded(true);
-    el.addEventListener("load", handler);
-    el.addEventListener("error", handler);
+    const loadHandler = () => setLoaded(true);
+    const errorHandler = () => { setLoaded(true); setFailed(true); };
+    el.addEventListener("load", loadHandler);
+    el.addEventListener("error", errorHandler);
     return () => {
-      el.removeEventListener("load", handler);
-      el.removeEventListener("error", handler);
+      el.removeEventListener("load", loadHandler);
+      el.removeEventListener("error", errorHandler);
     };
   }, [priority]);
+
+  // If no src provided, render a neutral placeholder block
+  if ((!src || failed) && showPlaceholder) {
+    return (
+      <div
+        className={`relative ${className || ""}`}
+        style={{ backgroundColor: "#f1f5f9", ...style }}
+        aria-label={alt || "Image placeholder"}
+      >
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 select-none">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M3 7a2 2 0 0 1 2-2h3l2-2h4l2 2h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"></path>
+            <circle cx="12" cy="13" r="3"></circle>
+          </svg>
+          <span className="mt-1 text-xs">No image</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -90,9 +112,10 @@ export default function SmartImage({
         alt={alt}
         loading={loading}
         decoding={decoding}
-        fetchpriority={fetchpriority}
+        fetchPriority={fetchPriority}
         style={{ display: "block", width: "100%", height: "100%", objectFit: "cover" }}
         onLoad={() => setLoaded(true)}
+        onError={() => { setLoaded(true); setFailed(true); }}
         {...imgProps}
       />
     </div>
