@@ -1,5 +1,5 @@
-import RichTextBox from "./RichTextBox";
+import Tiptap from "./Tiptap";
 
 export default function PostEditor({ value, onChange }) {
-  return <RichTextBox value={value} onChange={onChange} />;
+  return <Tiptap value={value} onChange={onChange} />;
 }
