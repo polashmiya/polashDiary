@@ -7,6 +7,9 @@ import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import Placeholder from "@tiptap/extension-placeholder";
+import Heading from "@tiptap/extension-heading";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
 import { common, createLowlight } from "lowlight";
 const lowlight = createLowlight(common);
 
@@ -32,7 +35,12 @@ export default function Tiptap({ value = "", onChange, placeholder = "Type '/' f
   const editor = useEditor({
     content: value,
     extensions: [
-      StarterKit.configure({ codeBlock: false }),
+      StarterKit.configure({
+        codeBlock: false, // disable default codeBlock, use CodeBlockLowlight
+      }),
+      Heading,
+      BulletList,
+      OrderedList,
       Typography,
       Link.configure({ linkOnPaste: true, openOnClick: false }),
       CodeBlockLowlight.configure({ lowlight }),

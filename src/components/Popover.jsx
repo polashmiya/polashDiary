@@ -26,9 +26,11 @@ export default function Popover({ editor }) {
       if (!domSelection || domSelection.rangeCount === 0) { setVisible(false); return; }
       const rect = domSelection.getRangeAt(0).getBoundingClientRect();
       if (!rect || (rect.x === 0 && rect.y === 0 && rect.width === 0 && rect.height === 0)) { setVisible(false); return; }
-      const top = Math.max(8, rect.top - 44 + window.scrollY);
-      const left = rect.left + rect.width / 2 + window.scrollX;
-      setPos({ top, left });
+  // Place popover to the right of the selection
+  // Place popover to the right of the selection, vertically centered
+  const top = rect.top + window.scrollY + rect.height / 2;
+  const left = rect.right + 16 + window.scrollX; // 16px gap to the right for better spacing
+  setPos({ top, left });
       setVisible(true);
     };
     update();
@@ -44,7 +46,7 @@ export default function Popover({ editor }) {
   const isSelectionOverLink = !!editor.getAttributes("link").href;
 
   return (
-    <div className="Popover" style={{ position: "absolute", top: pos.top, left: pos.left, transform: "translate(-50%, -100%)" }}>
+  <div className="Popover" style={{ position: "absolute", top: pos.top, left: pos.left, transform: "translateY(-50%)" }}>
       <div className="icon" onClick={() => editor.chain().focus().toggleBold().run()}>
         <RiBold />
       </div>
