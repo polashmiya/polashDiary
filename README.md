@@ -1,6 +1,6 @@
-# Personal Blog – React + Tailwind
+# Personal Blog – React + Tailwind + Remote API
 
-A clean, responsive blog built with React (Vite), React Router, and Tailwind CSS. Posts are loaded from a local JSON file and rendered with optional Markdown support.
+A clean, responsive blog built with React (Vite), React Router, and Tailwind CSS. The app now integrates with a remote REST API for authentication, posts, and comments.
 
 ## Features
 
@@ -9,6 +9,10 @@ A clean, responsive blog built with React (Vite), React Router, and Tailwind CSS
 - Blog details page with hero image and Markdown rendering
 - Simple header and footer with social links
 - Clean Tailwind-styled UI (mobile-first)
+- Remote API integration (Axios):
+	- Auth: signup, login
+	- Posts: list (with optional search), create, get by id
+	- Comments: add comment to a post
 
 ## Tech stack
 
@@ -61,23 +65,20 @@ npm run build
 npm run preview
 ```
 
-## Data model
+## API
 
-Each blog post in `src/data/blogs.json` looks like this:
+Base URL: `https://polash-dairy-api.onrender.com/api`
 
-```json
-{
-	"id": 1,
-	"slug": "react-hooks-best-practices",
-	"title": "React Hooks: Best Practices for Clean Components",
-	"category": "Frontend",
-	"date": "2025-09-20",
-	"author": "Jane Developer",
-	"featuredImage": "https://...",
-	"description": "Short preview text...",
-	"content": "# Markdown body here..."
-}
-```
+Endpoints used by the app:
+
+- POST `/auth/signup` – `{ name, email, password }`
+- POST `/auth/login` – `{ email, password }` → expects `{ token, user }`
+- GET `/posts` – optional `?search=query`
+- POST `/posts` – `{ title, imageUrl, content, category, author }`
+- GET `/posts/:id`
+- POST `/posts/:id/comments` – `{ text }`
+
+Axios client is configured in `src/lib/api.js` with a request interceptor that attaches the `Authorization: Bearer <token>` header from localStorage when available.
 
 ## Suggestions for future improvements
 
@@ -85,7 +86,8 @@ Each blog post in `src/data/blogs.json` looks like this:
 	- Replace JSON with a real API (REST/GraphQL)
 	- Static site generation or MDX-based content
 - Admin features
-	- Secure login, create/edit posts, upload images
+	- Backend-powered user management and moderation
+	- Edit/delete posts and comments
 	- Drafts, scheduled publishing, categories/tags management
 - UX/UI
 	- Search, pagination/infinite scroll
@@ -102,5 +104,5 @@ Each blog post in `src/data/blogs.json` looks like this:
 
 ## Notes
 
-- The details page renders Markdown via `react-markdown`. You can store long-form content as Markdown in the JSON file for convenience.
-- Category filters also sync with the URL (`?category=...`) for shareable filtered views.
+- The details page renders Markdown via `react-markdown` or sanitizes HTML if the content is HTML.
+- Search is sent to the backend only when a query is present; category filtering is done client-side.

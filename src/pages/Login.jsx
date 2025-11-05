@@ -65,9 +65,7 @@ export default function Login() {
         >
           {submitting ? "Logging in..." : "Login"}
         </button>
-        <div className="text-xs text-slate-500 mt-2">
-          Demo users: admin@gmail.com / 123456 • author@gmail.com / 123456 • user@gmail.com / 123456
-        </div>
+        
       </form>
     </div>
   );

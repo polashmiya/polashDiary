@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as Motion } from "framer-motion";
 
 export default function BackToTop({ threshold = 300 }) {
   const [visible, setVisible] = useState(false);
@@ -20,7 +20,7 @@ export default function BackToTop({ threshold = 300 }) {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.button
+        <Motion.button
           key="back-to-top"
           initial={{ opacity: 0, y: 12, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -33,7 +33,7 @@ export default function BackToTop({ threshold = 300 }) {
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 15l7-7 7 7" />
           </svg>
-        </motion.button>
+        </Motion.button>
       )}
     </AnimatePresence>
   );

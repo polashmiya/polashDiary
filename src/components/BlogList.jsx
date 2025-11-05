@@ -4,7 +4,7 @@ export default function BlogList({ posts }) {
   if (!posts?.length) {
     return (
       <div className="text-center text-slate-600">
-        <p>No posts found.</p>
+        <p>No posts or blogs found.</p>
       </div>
     );
   }

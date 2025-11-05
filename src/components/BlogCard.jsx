@@ -37,7 +37,7 @@ export default function BlogCard({ post, delay = 0 }) {
       transition={{ type: "spring", stiffness: 300, damping: 24, mass: 0.8, delay }}
       whileHover={{ y: -2, scale: 1.01 }}
     >
-      <Link to={`/post/${post.slug}`} className="block aspect-video overflow-hidden bg-slate-100">
+  <Link to={`/post/${post.id}`} className="block aspect-video overflow-hidden bg-slate-100">
         <SmartImage
           src={post.featuredImage}
           alt={post.title}
@@ -55,7 +55,7 @@ export default function BlogCard({ post, delay = 0 }) {
           <span>{post.author}</span>
         </div>
         <h3 className="text-lg font-semibold text-slate-900">
-          <Link to={`/post/${post.slug}`}>{post.title}</Link>
+          <Link to={`/post/${post.id}`}>{post.title}</Link>
         </h3>
         <div className="PreviewContainer mt-2">
           {isHtml ? (
@@ -70,7 +70,7 @@ export default function BlogCard({ post, delay = 0 }) {
           {hasOverflow && <span aria-hidden className="ellipsis">…</span>}
         </div>
         <div className="mt-auto pt-4">
-          <Link to={`/post/${post.slug}`} className="text-sm font-medium text-indigo-600 hover:text-indigo-800">
+          <Link to={`/post/${post.id}`} className="text-sm font-medium text-indigo-600 hover:text-indigo-800">
             Read more →
           </Link>
         </div>

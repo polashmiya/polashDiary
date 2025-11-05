@@ -1,51 +1,11 @@
+import { api, setToken } from "./api";
+
 const KEY = "authUser";
-const USERS_KEY = "authUsers"; // simplistic local user store
 
 export const Roles = {
   Admin: "admin",
   User: "user",
 };
-
-function seedUsersIfNeeded() {
-  const raw = localStorage.getItem(USERS_KEY);
-  if (raw) return; // already seeded/has content
-  const defaults = [
-    {
-      id: crypto.randomUUID(),
-      name: "Admin",
-      email: "admin@gmail.com",
-      password: "123456",
-      role: Roles.Admin,
-      userTypeName: "Admin",
-      userTypeId: 1,
-      active: true,
-    },
-    {
-      id: crypto.randomUUID(),
-      name: "User",
-      email: "user@gmail.com",
-      password: "123456",
-      role: Roles.User,
-      userTypeName: "User",
-      userTypeId: 2,
-      active: true,
-    },
-  ];
-  localStorage.setItem(USERS_KEY, JSON.stringify(defaults));
-}
-
-function loadUsers() {
-  seedUsersIfNeeded();
-  try {
-    return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function saveUsers(users) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
 
 export function getUser() {
   try {
@@ -55,63 +15,52 @@ export function getUser() {
   }
 }
 
-export function signup({ name, email, password }) {
-  const users = loadUsers();
-  const exists = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
-  if (exists) {
-    throw new Error("An account with this email already exists.");
-  }
-  const user = { id: crypto.randomUUID(), name, email, password, role: Roles.User, userTypeName: "User", userTypeId: 2, active: true }; // do NOT use in production
-  users.push(user);
-  saveUsers(users);
-  const session = { id: user.id, name: user.name, email: user.email, role: user.role, userTypeName: user.userTypeName, userTypeId: user.userTypeId };
-  localStorage.setItem(KEY, JSON.stringify(session));
-  return session;
+function persistSession({ user, token }) {
+  if (!user) return null;
+  const normalized = { ...user };
+  if (!normalized.id && normalized._id) normalized.id = normalized._id;
+  if (!normalized.role) normalized.role = Roles.User;
+  if (token) setToken(token);
+  localStorage.setItem(KEY, JSON.stringify(normalized));
+  return normalized;
 }
 
-export function login({ email, password }) {
-  const users = loadUsers();
-  const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
-  if (!user || user.password !== password) {
-    throw new Error("Invalid email or password.");
+export async function signup({ name, email, password }) {
+  // Try to sign up; if API does not return token, fallback to login
+  const res = await api.post("/auth/signup", { name, email, password });
+  const user = res?.user || res?.data?.user || res;
+  const token = res?.token || res?.data?.token;
+  if (token && user) return persistSession({ user, token });
+  // fallback: login to get token
+  const u = await login({ email, password });
+  // Optionally update name if signup response had it
+  if (user?.name && u && !u.name) {
+    const merged = { ...u, name: user.name };
+    localStorage.setItem(KEY, JSON.stringify(merged));
+    return merged;
   }
-  if (!user.active) {
-    throw new Error("Your account is inactive. Please contact admin.");
-  }
-  const session = { id: user.id, name: user.name, email: user.email, role: user.role, userTypeName: user.userTypeName, userTypeId: user.userTypeId };
-  localStorage.setItem(KEY, JSON.stringify(session));
-  return session;
+  return u;
+}
+
+export async function login({ email, password }) {
+  const res = await api.post("/auth/login", { email, password });
+  const token = res?.token || res?.data?.token;
+  const user = res?.user || res?.data?.user || {
+    id: res?.userId || res?._id || res?.id,
+    email,
+    name: res?.name,
+    role: res?.role || Roles.User,
+  };
+  if (!token) throw new Error("Login failed: token not provided");
+  return persistSession({ user, token });
 }
 
 export function logout() {
+  setToken(null);
   localStorage.removeItem(KEY);
 }
 
-// Admin utilities
-export function listUsers() {
-  return loadUsers();
-}
-
-export function setUserActive(userId, active) {
-  const users = loadUsers();
-  const idx = users.findIndex((u) => u.id === userId);
-  if (idx !== -1) {
-    users[idx].active = !!active;
-    saveUsers(users);
-  }
-}
-
-export function createUser({ name, email, password, role = Roles.User, active = true }) {
-  const users = loadUsers();
-  const exists = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
-  if (exists) throw new Error("Email already exists");
-  const userTypeMap = {
-    [Roles.Admin]: { userTypeName: "Admin", userTypeId: 1 },
-    [Roles.User]: { userTypeName: "User", userTypeId: 2 },
-  };
-  const meta = userTypeMap[role] || userTypeMap[Roles.User];
-  const u = { id: crypto.randomUUID(), name, email, password, role, active, ...meta };
-  users.push(u);
-  saveUsers(users);
-  return u;
-}
+// Admin utilities (not implemented against API)
+export function listUsers() { throw new Error("Not implemented"); }
+export function setUserActive() { throw new Error("Not implemented"); }
+export function createUser() { throw new Error("Not implemented"); }

@@ -16,10 +16,12 @@ export function AuthProvider({ children }) {
   const login = async (credentials) => {
     setError(null);
     try {
-      const u = loginFn(credentials);
+      const u = await loginFn(credentials);
       setUser(u);
       return u;
     } catch (e) {
+      // ensure no optimistic auth state leaks into the UI on failure
+      setUser(null);
       setError(e.message);
       throw e;
     }
@@ -28,10 +30,11 @@ export function AuthProvider({ children }) {
   const signup = async (payload) => {
     setError(null);
     try {
-      const u = signupFn(payload);
+      const u = await signupFn(payload);
       setUser(u);
       return u;
     } catch (e) {
+      setUser(null);
       setError(e.message);
       throw e;
     }

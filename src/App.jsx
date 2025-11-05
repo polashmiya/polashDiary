@@ -11,16 +11,18 @@ import AdminDashboard from './pages/AdminDashboard'
 import { Roles } from './lib/auth'
 import CreatePost from './pages/CreatePost'
 import ScrollToTop from './components/ScrollToTop'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
+      <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
       <Header />
       <ScrollToTop />
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/post/:slug" element={<BlogDetails />} />
+          <Route path="/post/:id" element={<BlogDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route element={<ProtectedRoute roles={[Roles.Admin]} />}> 

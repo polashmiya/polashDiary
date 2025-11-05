@@ -1,30 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PostEditor from "../components/PostEditor";
-import { addPost } from "../lib/posts";
+import { createPost } from "../lib/posts";
 import { useAuth } from "../hooks/useAuth";
-
-function slugify(text = "") {
-  const s = text.toString().toLowerCase().trim();
-  let out = "";
-  let lastDash = false;
-  for (const ch of s) {
-    const code = ch.codePointAt(0);
-    const isAlnum = (code >= 97 && code <= 122) || (code >= 48 && code <= 57);
-    if (isAlnum) {
-      out += ch;
-      lastDash = false;
-      continue;
-    }
-    if (!lastDash && out.length > 0) {
-      out += "-";
-      lastDash = true;
-    }
-  }
-  // trim trailing dash
-  if (out.endsWith("-")) out = out.slice(0, -1);
-  return out;
-}
 
 const CATEGORIES = ["Frontend", "Backend", "DevOps", "QA", "Others"]; 
 
@@ -33,30 +11,31 @@ export default function CreatePost() {
   const navigate = useNavigate();
   const [html, setHtml] = useState("");
   const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [featuredImage, setFeaturedImage] = useState("");
   const [saving, setSaving] = useState(false);
 
+  // Hide page scrollbar while on the Create page
   useEffect(() => {
-    if (!slug && title) setSlug(slugify(title));
-  }, [title, slug]);
+    document.body.classList.add("no-scrollbar");
+    return () => {
+      document.body.classList.remove("no-scrollbar");
+    };
+  }, []);
 
-  const submit = async (status) => {
-    if (!title || !slug) return;
+  const submit = async () => {
+    if (!title) return;
     setSaving(true);
     try {
-      addPost({
+      const created = await createPost({
         title,
-        slug,
-        category,
+        imageUrl: featuredImage,
         content: html || "<p></p>",
-        authorId: user.id,
-        authorName: user.name,
-        featuredImage,
-        status,
+        category,
+        author: user.id,
       });
-      navigate(`/post/${slug}`);
+      const id = created?._id || created?.id;
+      navigate(`/post/${id}`);
     } finally {
       setSaving(false);
     }
@@ -67,15 +46,9 @@ export default function CreatePost() {
       <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Create a Post</h1>
 
       <div className="mt-6 grid gap-4">
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div>
-            <label htmlFor="title" className="block text-sm font-medium text-slate-700">Title</label>
-            <input id="title" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:outline-none" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="Your amazing title" />
-          </div>
-          <div>
-            <label htmlFor="slug" className="block text-sm font-medium text-slate-700">Slug</label>
-            <input id="slug" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:outline-none" value={slug} onChange={(e)=>setSlug(slugify(e.target.value))} placeholder="auto-generated-from-title" />
-          </div>
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium text-slate-700">Title</label>
+          <input id="title" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:outline-none" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="Your amazing title" />
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
@@ -97,8 +70,12 @@ export default function CreatePost() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button disabled={saving} onClick={()=>submit("draft")} className="rounded-md border border-slate-300 px-4 py-2 text-slate-700 hover:bg-slate-50 disabled:opacity-60">Save draft</button>
-          <button disabled={saving} onClick={()=>submit("published")} className="rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 disabled:opacity-60">Publish</button>
+          <button disabled={saving} onClick={submit} className="rounded-md border border-slate-300 px-4 py-2 text-slate-700 hover:bg-slate-50 disabled:opacity-60">
+            {saving ? "Saving..." : "Save draft"}
+          </button>
+          <button disabled={saving} onClick={submit} className="rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 disabled:opacity-60">
+            {saving ? "Publishing..." : "Publish"}
+          </button>
         </div>
       </div>
     </div>

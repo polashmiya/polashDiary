@@ -25,3 +25,8 @@ body {
 
 /* Keep code blocks monospace regardless of language */
 code, pre code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+/* Utility: hide scrollbars but keep scroll functionality */
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
