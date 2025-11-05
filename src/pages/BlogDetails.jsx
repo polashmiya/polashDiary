@@ -1,8 +1,9 @@
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import CodeBlock from "../components/CodeBlock";
+// Use highlight.js classes in markdown too, so it matches the editor (tiptap lowlight)
+import rehypeHighlight from "rehype-highlight";
 import { motion } from "framer-motion";
 import SmartImage from "../components/SmartImage";
 import { sanitizeHtml } from "../lib/sanitize";
@@ -12,16 +13,12 @@ import { getPostById } from "../lib/posts";
 import Loader from "../components/Loader";
 // Import editor styles so published posts render the same as in the editor
 import "../components/tiptap.css";
+// Client-side highlighter for HTML content saved from Tiptap
+import hljs from "highlight.js/lib/common";
 
-const markdownComponents = {
-  code({ inline, className, children, ...props }) {
-    return (
-      <CodeBlock inline={inline} className={className} {...props}>
-        {children}
-      </CodeBlock>
-    );
-  },
-};
+// We intentionally don't override the `code` element renderer.
+// `rehype-highlight` will add the appropriate hljs-* spans/classes and
+// our imported tiptap.css includes the highlight.js GitHub-like theme.
 
 const MotionArticle = motion.article;
 const MotionDiv = motion.div;
@@ -34,6 +31,7 @@ export default function BlogDetails() {
   const [error, setError] = useState("");
   const [text, setText] = useState("");
   const [posting, setPosting] = useState(false);
+  const contentRef = useRef(null);
 
   useEffect(() => {
     let canceled = false;
@@ -54,6 +52,20 @@ export default function BlogDetails() {
       canceled = true;
     };
   }, [id]);
+
+  // When content is HTML, run highlight.js to add hljs markup
+  useEffect(() => {
+    if (!post) return;
+    const isHtml = /^[\s]*</.test(post.content || "");
+    if (!isHtml) return; // markdown handled by rehype-highlight path
+    const root = contentRef.current;
+    if (!root) return;
+    const codes = root.querySelectorAll("pre code");
+    codes.forEach((el) => {
+      // Avoid double-highlighting
+      if (!el.classList.contains("hljs")) hljs.highlightElement(el);
+    });
+  }, [post]);
 
   const isBn = useMemo(
     () =>
@@ -155,12 +167,13 @@ export default function BlogDetails() {
       >
         {/^[\s]*</.test(post.content) ? (
           <div
+            ref={contentRef}
             dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
           />
         ) : (
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
-            components={markdownComponents}
+            rehypePlugins={[rehypeHighlight]}
           >
             {post.content}
           </ReactMarkdown>
