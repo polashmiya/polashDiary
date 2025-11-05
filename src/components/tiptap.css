@@ -2,6 +2,17 @@
 .ProseMirror:focus-visible {
   outline: none;
 }
+/* Converted from SCSS to CSS for ProseMirror/Tiptap editor styling */
+.ProseMirror:focus-visible {
+  outline: none;
+}
+
+
+/* Set a larger minimum height for the editor */
+.ProseMirror {
+  min-height: 200px;
+  /* Increased height for a larger editing area */
+}
 
 .ProseMirror > * + * {
   margin-top: 0.75em;
@@ -250,10 +261,3 @@
   color: #b31d28;
   background-color: #ffeef0;
 }
-
-.ProseMirror .hljs-char.escape_,
-.ProseMirror .hljs-link,
-.ProseMirror .hljs-params,
-.ProseMirror .hljs-property,
-.ProseMirror .hljs-punctuation,
-.ProseMirror .hljs-tag { /* no extra styles */ }
