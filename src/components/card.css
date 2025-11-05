@@ -1,0 +1,56 @@
+/* Styles for rich HTML previews inside blog cards */
+.PreviewContainer { position: relative; }
+
+/* Faded edge and ellipsis when content is truncated */
+.PreviewContainer .ellipsis {
+  position: absolute;
+  right: 0.25rem;
+  bottom: 0.1rem;
+  color: rgb(71 85 105); /* slate-600 */
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.PreviewContainer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.2em; /* roughly one line */
+  background: linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0));
+  pointer-events: none;
+}
+
+/* Clamp preview height and hide overflow */
+.preview-html {
+  margin-top: 0.5rem; /* similar spacing as previous paragraph */
+  font-size: 0.875rem; /* text-sm */
+  color: rgb(71 85 105); /* slate-600 */
+  line-height: 1.5;
+  max-height: 4.5em; /* ~3 lines */
+  min-height: 4.5em; /* reserve space so cards align */
+  overflow: hidden;
+}
+
+/* Match non-HTML previews to the same height */
+.preview-text {
+  line-height: 1.5;
+  max-height: 4.5em; /* ~3 lines */
+  min-height: 4.5em;
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Show all content types in previews; size is controlled by clamp above */
+
+/* Normalize list spacing to look tidy in previews */
+.preview-html ul,
+.preview-html ol {
+  margin: 0.25rem 0 0 1rem;
+  padding: 0;
+}
+.preview-html li { margin: 0.15rem 0; }

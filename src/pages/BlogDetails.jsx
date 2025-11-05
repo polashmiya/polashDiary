@@ -10,6 +10,8 @@ import SmartImage from "../components/SmartImage";
 import { sanitizeHtml } from "../lib/sanitize";
 import { useAuth } from "../hooks/useAuth";
 import { addComment, listComments, hideComment, deleteComment } from "../lib/comments";
+// Import editor styles so published posts render the same as in the editor
+import "../components/tiptap.css";
 
 const markdownComponents = {
   code({ inline, className, children, ...props }) {
@@ -97,8 +99,8 @@ export default function BlogDetails() {
         </div>
       </MotionDiv>
 
-      <MotionDiv className="prose prose-slate max-w-none prose-headings:scroll-mt-24" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
-        {/^\s*</.test(post.content) ? (
+      <MotionDiv className="ProseMirror prose prose-slate max-w-none prose-headings:scroll-mt-24" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
+        {/^[\s]*</.test(post.content) ? (
           <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }} />
         ) : (
           <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>

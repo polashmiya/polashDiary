@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import SmartImage from "./SmartImage";
+import { sanitizeHtml } from "../lib/sanitize";
+import "./tiptap.css";
+import "./card.css";
 
 function isBengaliText(text = "") {
   return /[\u0980-\u09FF]/.test(text);
@@ -10,10 +14,23 @@ const MotionArticle = motion.article;
 
 export default function BlogCard({ post, delay = 0 }) {
   const lang = isBengaliText(`${post.title} ${post.description}`) ? "bn" : "en";
+  const isHtml = /^\s*</.test(post.content || "");
+  const previewRef = useRef(null);
+  const [hasOverflow, setHasOverflow] = useState(false);
+
+  useEffect(() => {
+    const el = previewRef.current;
+    if (!el) return;
+    const check = () => setHasOverflow(el.scrollHeight - 1 > el.clientHeight); // -1 avoids off-by-one
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [isHtml, post.content, post.description]);
   return (
     <MotionArticle
       lang={lang}
-      className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm hover:shadow transition-shadow"
+      className="h-full flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm hover:shadow transition-shadow"
       initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
@@ -29,7 +46,7 @@ export default function BlogCard({ post, delay = 0 }) {
           imgProps={{ className: "hover:scale-[1.02] transition-transform" }}
         />
       </Link>
-      <div className="p-4">
+      <div className="p-4 flex flex-col flex-1">
         <div className="mb-2 flex items-center gap-2 text-xs text-slate-500">
           <span className="inline-block rounded bg-slate-100 px-2 py-0.5 text-slate-700">{post.category}</span>
           <span>•</span>
@@ -40,8 +57,19 @@ export default function BlogCard({ post, delay = 0 }) {
         <h3 className="text-lg font-semibold text-slate-900">
           <Link to={`/post/${post.slug}`}>{post.title}</Link>
         </h3>
-        <p className="mt-2 line-clamp-3 text-sm text-slate-600">{post.description}</p>
-        <div className="mt-4">
+        <div className="PreviewContainer mt-2">
+          {isHtml ? (
+            <div
+              ref={previewRef}
+              className="ProseMirror preview-html prose prose-slate"
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
+            />
+          ) : (
+            <p ref={previewRef} className="preview-text text-sm text-slate-600">{post.description}</p>
+          )}
+          {hasOverflow && <span aria-hidden className="ellipsis">…</span>}
+        </div>
+        <div className="mt-auto pt-4">
           <Link to={`/post/${post.slug}`} className="text-sm font-medium text-indigo-600 hover:text-indigo-800">
             Read more →
           </Link>
