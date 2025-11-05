@@ -47,25 +47,25 @@ export default function Popover({ editor }) {
 
   return (
   <div className="Popover" style={{ position: "absolute", top: pos.top, left: pos.left, transform: "translateY(-50%)" }}>
-      <div className="icon" onClick={() => editor.chain().focus().toggleBold().run()}>
+      <div className="icon" onMouseDown={(e)=>{ e.preventDefault(); editor.chain().focus().toggleBold().run(); }}>
         <RiBold />
       </div>
-      <div className="icon" onClick={() => editor.chain().focus().toggleItalic().run()}>
+      <div className="icon" onMouseDown={(e)=>{ e.preventDefault(); editor.chain().focus().toggleItalic().run(); }}>
         <RiItalic />
       </div>
-      <div className="icon" onClick={() => editor.chain().focus().toggleStrike().run()}>
+      <div className="icon" onMouseDown={(e)=>{ e.preventDefault(); editor.chain().focus().toggleStrike().run(); }}>
         <RiStrikethrough />
       </div>
-      <div className="icon" onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}>
+      <div className="icon" onMouseDown={(e)=>{ e.preventDefault(); editor.chain().focus().toggleHeading({ level: 1 }).run(); }}>
         <RiH1 />
       </div>
-      <div className="icon" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}>
+      <div className="icon" onMouseDown={(e)=>{ e.preventDefault(); editor.chain().focus().toggleHeading({ level: 2 }).run(); }}>
         <RiH2 />
       </div>
-      <div className="icon" onClick={() => (isSelectionOverLink ? editor.chain().focus().unsetLink().run() : setLink(editor))}>
+      <div className="icon" onMouseDown={(e)=>{ e.preventDefault(); (isSelectionOverLink ? editor.chain().focus().unsetLink().run() : setLink(editor)); }}>
         {isSelectionOverLink ? <RiLinkUnlink /> : <RiLink />}
       </div>
-      <div className="icon" onClick={() => editor.chain().focus().toggleCode().run()}>
+      <div className="icon" onMouseDown={(e)=>{ e.preventDefault(); editor.chain().focus().toggleCode().run(); }}>
         <RiCodeSSlashLine />
       </div>
     </div>
