@@ -256,32 +256,11 @@ export default function BlogDetails() {
         </div>
       </MotionDiv>
 
-      <section className="mt-10">
+      <section className="mt-10" id="comments">
         <h2 className="text-xl font-semibold text-slate-900">Comments</h2>
-        <div className="mt-4 space-y-3">
-          {!post.comments?.length ? (
-            <div className="text-sm text-slate-500">No comments yet.</div>
-          ) : (
-            post.comments.map((c) => (
-              <div
-                key={c._id || c.id}
-                className="border rounded px-3 py-2 text-sm flex items-start justify-between gap-3"
-              >
-                <div className="flex-1">
-                  <div className="font-medium text-slate-700">
-                    {c.author?.name || c.authorName || "Anonymous"}{" "}
-                    <span className="text-xs text-slate-400">
-                      {new Date(c.createdAt || Date.now()).toLocaleString()}
-                    </span>
-                  </div>
-                  <div>{c.text || c.content}</div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
 
-        <div className="mt-5">
+        {/* Write comment at the top */}
+        <div className="mt-3">
           {user ? (
             <form onSubmit={handleCommentSubmit} className="space-y-2">
               <textarea
@@ -292,25 +271,82 @@ export default function BlogDetails() {
                 onChange={(e) => setText(e.target.value)}
                 disabled={posting}
               />
-              <button
-                disabled={posting}
-                className="rounded bg-slate-900 text-white px-4 py-2 disabled:opacity-60 cursor-pointer"
-              >
-                {posting ? "Posting..." : "Post Comment"}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  disabled={posting}
+                  className="rounded bg-slate-900 text-white px-4 py-2 disabled:opacity-60"
+                >
+                  {posting ? "Posting..." : "Post Comment"}
+                </button>
+              </div>
             </form>
           ) : (
             <div className="text-sm text-slate-600">
               Please{" "}
-              <a
-                href="/login"
-                className="text-green-600 hover:text-green-800"
-              >
+              <a href="/login" className="text-green-600 hover:text-green-800">
                 login
               </a>{" "}
               to comment.
             </div>
           )}
+        </div>
+
+        {/* Scrollable comments below */}
+        <div className="mt-5">
+          <div className="mb-2 text-sm text-slate-500">
+            {/* {post.comments?.length ? `${post.comments.length} comment${post.comments.length > 1 ? "s" : ""}` : "No comments yet"} */}
+            Comments ({post.comments?.length || 0})
+          </div>
+          <div className=" space-y-2">
+            {!post.comments?.length ? (
+              <div className="rounded-md border border-dashed border-slate-300 p-4 text-sm text-slate-600">
+                Be the first to share your thoughts.
+              </div>
+            ) : (
+              post.comments.map((c) => {
+                const name = c.author?.name || c.authorName || "Anonymous";
+                const initials = (name || "?")
+                  .split(/\s+/)
+                  .filter(Boolean)
+                  .slice(0, 2)
+                  .map((s) => s[0]?.toUpperCase())
+                  .join("") || "?";
+                const date = new Date(c.createdAt || Date.now());
+                const timeAgo = (() => {
+                  const ms = Date.now() - date.getTime();
+                  const sec = Math.floor(ms / 1000);
+                  if (sec < 60) return `${sec}s ago`;
+                  const min = Math.floor(sec / 60);
+                  if (min < 60) return `${min}m ago`;
+                  const hr = Math.floor(min / 60);
+                  if (hr < 24) return `${hr}h ago`;
+                  const d = Math.floor(hr / 24);
+                  if (d < 7) return `${d}d ago`;
+                  return date.toLocaleDateString();
+                })();
+                const text = c.text || c.content;
+                return (
+                  <div
+                    key={c._id || c.id}
+                    className="flex items-start gap-3 rounded-lg border border-slate-200 bg-white p-3 text-sm shadow-sm"
+                  >
+                    <div className="mt-0.5 h-9 w-9 shrink-0 rounded-full bg-green-100 text-green-800 ring-1 ring-green-200 flex items-center justify-center font-semibold">
+                      <span className="text-xs">{initials}</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <span className="font-medium text-slate-800">{name}</span>
+                        <span className="text-xs text-slate-400">• {timeAgo}</span>
+                      </div>
+                      {text ? (
+                        <p className="mt-1 whitespace-pre-wrap text-slate-700">{text}</p>
+                      ) : null}
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
         </div>
       </section>
     </MotionArticle>
