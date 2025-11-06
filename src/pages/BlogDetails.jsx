@@ -304,7 +304,7 @@ export default function BlogDetails() {
               </div>
             ) : (
               post.comments.map((c) => {
-                const name = c.author?.name || c.authorName || "Anonymous";
+                const name = c.user?.name || c.author?.name || c.authorName || c.userName || "Anonymous";
                 const initials = (name || "?")
                   .split(/\s+/)
                   .filter(Boolean)
@@ -325,10 +325,30 @@ export default function BlogDetails() {
                   return date.toLocaleDateString();
                 })();
                 const text = c.text || c.content;
+                const isMine = !!user && (
+                  // Match nested user object
+                  (typeof c.user === "object" && (
+                    c.user?.id === user.id ||
+                    c.user?._id === user.id ||
+                    (user.email && c.user?.email === user.email)
+                  )) ||
+                  // Match nested author object
+                  (typeof c.author === "object" && (
+                    c.author?.id === user.id ||
+                    c.author?._id === user.id ||
+                    (user.email && c.author?.email === user.email)
+                  )) ||
+                  // Match flat id fields commonly used
+                  c.userId === user?.id ||
+                  c.authorId === user?.id ||
+                  c.author === user?.id
+                );
                 return (
                   <div
                     key={c._id || c.id}
-                    className="flex items-start gap-3 rounded-lg border border-slate-200 bg-white p-3 text-sm shadow-sm"
+                    className={`flex items-start gap-3 rounded-lg border p-3 text-sm shadow-sm ${
+                      isMine ? "bg-green-50 border-green-200" : "bg-white border-slate-200"
+                    }`}
                   >
                     <div className="mt-0.5 h-9 w-9 shrink-0 rounded-full bg-green-100 text-green-800 ring-1 ring-green-200 flex items-center justify-center font-semibold">
                       <span className="text-xs">{initials}</span>
@@ -336,6 +356,11 @@ export default function BlogDetails() {
                     <div className="flex-1">
                       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                         <span className="font-medium text-slate-800">{name}</span>
+                        {isMine && (
+                          <span className="rounded-full bg-green-100 px-1.5 py-0.5 text-[10px] font-medium text-green-800">
+                            You
+                          </span>
+                        )}
                         <span className="text-xs text-slate-400">• {timeAgo}</span>
                       </div>
                       {text ? (
