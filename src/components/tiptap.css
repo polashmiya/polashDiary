@@ -2,10 +2,6 @@
 .ProseMirror:focus-visible {
   outline: none;
 }
-/* Converted from SCSS to CSS for ProseMirror/Tiptap editor styling */
-.ProseMirror:focus-visible {
-  outline: none;
-}
 
 
 /* Set a larger minimum height for the editor */
@@ -185,7 +181,16 @@
 /* Highlight.js GitHub-like theme */
 .ProseMirror .hljs {
   color: #24292e;
-  background: #ffffff;
+  /* Avoid white stripes behind each line; let the pre element carry the background */
+  background: transparent;
+}
+
+/* Also ensure no background/padding is added by typography defaults inside pre */
+.ProseMirror pre code,
+.prose pre code {
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
 }
 
 .ProseMirror .hljs-doctag,
