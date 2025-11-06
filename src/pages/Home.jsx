@@ -149,8 +149,9 @@ export default function Home() {
   );
 
   console.log("Rendering Home with loading:", loading, allPosts, filtered);
+  const MotionDiv = motion.div;
   return (
-    <motion.div
+    <MotionDiv
       className="mx-auto max-w-6xl px-4 sm:px-6 py-8 min-h-[60vh]"
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
@@ -208,6 +209,6 @@ export default function Home() {
           )}
         </div>
       )}
-    </motion.div>
+    </MotionDiv>
   );
 }

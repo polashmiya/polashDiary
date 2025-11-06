@@ -1,0 +1,45 @@
+/* Styles for copy buttons injected into content blocks */
+.copy-block {
+  position: relative;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.25rem; /* 4px */
+  right: 0.25rem; /* 4px */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem; /* 6px */
+  padding: 0.25rem 0.5rem; /* 4px 8px */
+  font-size: 0.75rem; /* 12px */
+  line-height: 1;
+  border-radius: 0.375rem; /* 6px */
+  border: 1px solid rgba(100, 116, 139, 0.4); /* slate-500/40 */
+  background-color: rgba(15, 23, 42, 0.7); /* slate-900/70 */
+  color: #f8fafc; /* slate-50 */
+  opacity: 0;
+  transition: opacity 150ms ease, background-color 150ms ease, transform 150ms ease;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.copy-block:hover > .copy-btn,
+.copy-btn:focus {
+  opacity: 1;
+}
+
+.copy-btn.copied {
+  background-color: rgba(16, 185, 129, 0.85); /* emerald-500/85 */
+}
+
+.copy-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Special case for pre blocks: place a bit lower to avoid overlapping line numbers or borders */
+pre.copy-block > .copy-btn,
+pre .copy-btn {
+  top: 0.5rem; /* 8px */
+  right: 0.5rem; /* 8px */
+}

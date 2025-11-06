@@ -15,6 +15,8 @@ import Loader from "../components/Loader";
 import "../components/tiptap.css";
 // Client-side highlighter for HTML content saved from Tiptap
 import hljs from "highlight.js/lib/common";
+// Copy button styles
+import "../components/copy.css";
 
 // We intentionally don't override the `code` element renderer.
 // `rehype-highlight` will add the appropriate hljs-* spans/classes and
@@ -53,18 +55,91 @@ export default function BlogDetails() {
     };
   }, [id]);
 
-  // When content is HTML, run highlight.js to add hljs markup
+  // Enhance rendered content: syntax highlight for HTML path and add copy buttons to blocks
   useEffect(() => {
     if (!post) return;
-    const isHtml = /^[\s]*</.test(post.content || "");
-    if (!isHtml) return; // markdown handled by rehype-highlight path
     const root = contentRef.current;
     if (!root) return;
-    const codes = root.querySelectorAll("pre code");
-    codes.forEach((el) => {
-      // Avoid double-highlighting
-      if (!el.classList.contains("hljs")) hljs.highlightElement(el);
-    });
+
+    const isHtml = /^[\s]*</.test(post.content || "");
+
+    // For raw HTML, apply client-side highlight.js (markdown handled by rehype-highlight)
+    if (isHtml) {
+      const codes = root.querySelectorAll("pre code");
+      codes.forEach((el) => {
+        if (!el.classList.contains("hljs")) hljs.highlightElement(el);
+      });
+    }
+
+    // Add copy buttons to each code block only
+    const enhanceCopyButtons = () => {
+      const blocks = root.querySelectorAll("pre");
+
+      const doCopy = async (blockEl) => {
+        try {
+          const clone = blockEl.cloneNode(true);
+          // Remove any existing copy buttons in the clone
+          clone.querySelectorAll('[data-copy-button="true"]').forEach((n) => n.remove());
+          const text = clone.innerText.trim();
+          if (!text) return false;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+            return true;
+          }
+          // Fallback
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "absolute";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          const ok = document.execCommand ? document.execCommand("copy") : false;
+          document.body.removeChild(ta);
+          return ok;
+        } catch {
+          return false;
+        }
+      };
+
+      blocks.forEach((block) => {
+        if (block.dataset.copyEnhanced === "true") return;
+        block.dataset.copyEnhanced = "true";
+        block.classList.add("copy-block");
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.setAttribute("aria-label", "Copy code block");
+        btn.setAttribute("data-copy-button", "true");
+        btn.className = "copy-btn";
+        btn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-label">Copy</span>
+        `;
+
+        let copyTimer;
+        btn.addEventListener("click", async (e) => {
+          e.stopPropagation();
+          const success = await doCopy(block);
+          btn.classList.toggle("copied", !!success);
+          const label = btn.querySelector(".copy-label");
+          if (label) label.textContent = success ? "Copied" : "Copy";
+          clearTimeout(copyTimer);
+          copyTimer = setTimeout(() => {
+            btn.classList.remove("copied");
+            if (label) label.textContent = "Copy";
+          }, 1200);
+        });
+
+        // Append button inside pre so it overlays the code block
+        block.appendChild(btn);
+      });
+    };
+
+    enhanceCopyButtons();
   }, [post]);
 
   const isBn = useMemo(
@@ -165,19 +240,20 @@ export default function BlogDetails() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.35 }}
       >
-        {/^[\s]*</.test(post.content) ? (
-          <div
-            ref={contentRef}
-            dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
-          />
-        ) : (
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeHighlight]}
-          >
-            {post.content}
-          </ReactMarkdown>
-        )}
+        <div ref={contentRef}>
+          {/^[\s]*</.test(post.content) ? (
+            <div
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
+            />
+          ) : (
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeHighlight]}
+            >
+              {post.content}
+            </ReactMarkdown>
+          )}
+        </div>
       </MotionDiv>
 
       <section className="mt-10">
