@@ -70,10 +70,10 @@ export default function CreatePost() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button disabled={saving} onClick={submit} className="rounded-md border border-slate-300 px-4 py-2 text-slate-700 hover:bg-slate-50 disabled:opacity-60">
+          <button disabled={saving} onClick={submit} className="rounded-md border border-slate-300 px-4 py-2 text-slate-700 hover:bg-slate-50 disabled:opacity-60 cursor-pointer">
             {saving ? "Saving..." : "Save draft"}
           </button>
-          <button disabled={saving} onClick={submit} className="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-60">
+          <button disabled={saving} onClick={submit} className="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-60 cursor-pointer">
             {saving ? "Publishing..." : "Publish"}
           </button>
         </div>

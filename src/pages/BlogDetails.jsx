@@ -294,7 +294,7 @@ export default function BlogDetails() {
               />
               <button
                 disabled={posting}
-                className="rounded bg-slate-900 text-white px-4 py-2 disabled:opacity-60"
+                className="rounded bg-slate-900 text-white px-4 py-2 disabled:opacity-60 cursor-pointer"
               >
                 {posting ? "Posting..." : "Post Comment"}
               </button>
