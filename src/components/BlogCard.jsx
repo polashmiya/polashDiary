@@ -70,7 +70,7 @@ export default function BlogCard({ post, delay = 0 }) {
           {hasOverflow && <span aria-hidden className="ellipsis">…</span>}
         </div>
         <div className="mt-auto pt-4">
-          <Link to={`/post/${post.id}`} className="text-sm font-medium text-indigo-600 hover:text-indigo-800">
+          <Link to={`/post/${post.id}`} className="text-sm font-medium text-green-600 hover:text-green-800">
             Read more →
           </Link>
         </div>

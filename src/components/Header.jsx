@@ -10,19 +10,19 @@ export default function Header() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="text-xl font-bold tracking-tight text-slate-900">
-            <span className="text-indigo-600">Polash</span> Diary
+            <span className="text-green-600">Polash</span> Diary
           </Link>
           <div className="flex items-center gap-3">
             {user ? (
               <div className="flex items-center gap-3">
                 <span className="text-sm text-slate-700">Hi, {user.name}</span>
                 {user.role === Roles.Admin && (
-                  <Link to="/admin" className="text-sm text-indigo-600 hover:text-indigo-800">Admin</Link>
+                  <Link to="/admin" className="text-sm text-green-600 hover:text-green-800">Admin</Link>
                 )}
-                <Link to="/create-post" className="text-sm text-indigo-600 hover:text-indigo-800">Create Post</Link>
+                <Link to="/create-post" className="text-sm text-green-600 hover:text-green-800">Create Post</Link>
                 <button
                   onClick={logout}
-                  className="px-3 py-2 rounded-md text-sm font-medium text-indigo-600 border border-indigo-200 hover:bg-indigo-50"
+                  className="px-3 py-2 rounded-md text-sm font-medium text-green-600 border border-green-200 hover:bg-green-50"
                 >
                   Logout
                 </button>
@@ -31,13 +31,13 @@ export default function Header() {
               <div className="flex items-center gap-2">
                 <Link
                   to="/login"
-                  className="px-3 py-2 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                  className="px-3 py-2 rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700"
                 >
                   Login
                 </Link>
                 <Link
                   to="/signup"
-                  className="px-3 py-2 rounded-md text-sm font-medium text-indigo-600 border border-indigo-200 hover:bg-indigo-50"
+                  className="px-3 py-2 rounded-md text-sm font-medium text-green-600 border border-green-200 hover:bg-green-50"
                 >
                   Sign up
                 </Link>

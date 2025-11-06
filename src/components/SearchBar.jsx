@@ -18,7 +18,7 @@ export default function SearchBar({ value, onChange, placeholder = "Search artic
         type="search"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        className="w-full rounded-md border border-slate-300 bg-white pr-10 pl-3 py-2 text-sm text-slate-900 shadow-sm focus:border-indigo-500 focus:outline-none"
+        className="w-full rounded-md border border-slate-300 bg-white pr-10 pl-3 py-2 text-sm text-slate-900 shadow-sm focus:border-green-500 focus:outline-none"
         placeholder={placeholder}
       />
       <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

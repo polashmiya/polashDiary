@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+/* (Optional) You can style prose links with utilities in markup; no global color override */
+
 /* Global font stacks: Inter for Latin; Noto Sans Bengali for Bangla */
 html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 body {

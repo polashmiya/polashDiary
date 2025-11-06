@@ -39,7 +39,7 @@ export default function AuthorDashboard() {
           <textarea className="w-full border rounded px-3 py-2" rows={6} placeholder="Content (Markdown)" value={form.content} onChange={e=>setForm({...form,content:e.target.value})} />
           <div className="flex gap-2">
             <button className="rounded bg-slate-900 text-white px-4 py-2" onClick={create("draft")}>Save Draft</button>
-            <button className="rounded bg-indigo-600 text-white px-4 py-2" onClick={create("published")}>Publish</button>
+            <button className="rounded bg-green-600 text-white px-4 py-2" onClick={create("published")}>Publish</button>
           </div>
         </form>
       </section>

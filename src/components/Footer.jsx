@@ -9,7 +9,7 @@ export default function Footer() {
             href="https://www.linkedin.com/in/md-polash-miya-726667193/"
             target="_blank"
             rel="noreferrer"
-            className="text-indigo-600 hover:text-indigo-800"
+            className="text-green-600 hover:text-green-800"
           >
             LinkedIn
           </a>

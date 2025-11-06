@@ -48,19 +48,19 @@ export default function CreatePost() {
       <div className="mt-6 grid gap-4">
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-slate-700">Title</label>
-          <input id="title" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:outline-none" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="Your amazing title" />
+          <input id="title" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-green-500 focus:outline-none" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="Your amazing title" />
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
             <label htmlFor="category" className="block text-sm font-medium text-slate-700">Category</label>
-            <select id="category" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:outline-none" value={category} onChange={(e)=>setCategory(e.target.value)}>
+            <select id="category" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-green-500 focus:outline-none" value={category} onChange={(e)=>setCategory(e.target.value)}>
               {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
           <div>
             <label htmlFor="featuredImage" className="block text-sm font-medium text-slate-700">Featured image URL (optional)</label>
-            <input id="featuredImage" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:outline-none" value={featuredImage} onChange={(e)=>setFeaturedImage(e.target.value)} placeholder="https://..." />
+            <input id="featuredImage" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-green-500 focus:outline-none" value={featuredImage} onChange={(e)=>setFeaturedImage(e.target.value)} placeholder="https://..." />
           </div>
         </div>
 
@@ -73,7 +73,7 @@ export default function CreatePost() {
           <button disabled={saving} onClick={submit} className="rounded-md border border-slate-300 px-4 py-2 text-slate-700 hover:bg-slate-50 disabled:opacity-60">
             {saving ? "Saving..." : "Save draft"}
           </button>
-          <button disabled={saving} onClick={submit} className="rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 disabled:opacity-60">
+          <button disabled={saving} onClick={submit} className="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-60">
             {saving ? "Publishing..." : "Publish"}
           </button>
         </div>

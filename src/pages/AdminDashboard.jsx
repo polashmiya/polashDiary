@@ -9,7 +9,7 @@ export default function AdminDashboard() {
         You can still create posts from the Create Post page and manage content using the backend.
       </p>
       <div className="mt-6">
-        <a href="/create-post" className="inline-block rounded bg-indigo-600 text-white px-4 py-2">Create Post</a>
+        <a href="/create-post" className="inline-block rounded bg-green-600 text-white px-4 py-2">Create Post</a>
       </div>
     </div>
   );

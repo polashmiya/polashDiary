@@ -26,7 +26,7 @@ export default function Signup() {
       <h1 className="text-2xl font-bold tracking-tight text-slate-900">Create your account</h1>
       <p className="mt-2 text-sm text-slate-600">
         Already have an account?{" "}
-        <Link className="text-indigo-600 hover:text-indigo-800" to="/login">Login</Link>
+  <Link className="text-green-600 hover:text-green-800" to="/login">Login</Link>
       </p>
 
       <form onSubmit={onSubmit} className="mt-6 space-y-4">
@@ -40,7 +40,7 @@ export default function Signup() {
           <input
             type="text"
             required
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-900 shadow-sm focus:border-indigo-500 focus:outline-none"
+            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-900 shadow-sm focus:border-green-500 focus:outline-none"
             value={form.name}
             onChange={(e) => { setForm({ ...form, name: e.target.value }); setError(null); }}
           />
@@ -50,7 +50,7 @@ export default function Signup() {
           <input
             type="email"
             required
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-900 shadow-sm focus:border-indigo-500 focus:outline-none"
+            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-900 shadow-sm focus:border-green-500 focus:outline-none"
             value={form.email}
             onChange={(e) => { setForm({ ...form, email: e.target.value }); setError(null); }}
           />
@@ -61,7 +61,7 @@ export default function Signup() {
             type="password"
             required
             minLength={6}
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-900 shadow-sm focus:border-indigo-500 focus:outline-none"
+            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-slate-900 shadow-sm focus:border-green-500 focus:outline-none"
             value={form.password}
             onChange={(e) => { setForm({ ...form, password: e.target.value }); setError(null); }}
           />

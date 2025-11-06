@@ -175,7 +175,7 @@ export default function BlogDetails() {
         <p className="text-slate-700">{error || "Post not found."}</p>
         <Link
           to="/"
-          className="mt-4 inline-block text-indigo-600 hover:text-indigo-800"
+          className="mt-4 inline-block text-green-600 hover:text-green-800"
         >
           ← Back to home
         </Link>
@@ -192,7 +192,7 @@ export default function BlogDetails() {
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       <div className="mb-6">
-        <Link to="/" className="text-indigo-600 hover:text-indigo-800">
+  <Link to="/" className="text-green-600 hover:text-green-800">
           ← Back to home
         </Link>
       </div>
@@ -304,7 +304,7 @@ export default function BlogDetails() {
               Please{" "}
               <a
                 href="/login"
-                className="text-indigo-600 hover:text-indigo-800"
+                className="text-green-600 hover:text-green-800"
               >
                 login
               </a>{" "}
