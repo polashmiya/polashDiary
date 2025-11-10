@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import PostEditor from "../components/PostEditor";
 import { createPost } from "../lib/posts";
 import { useAuth } from "../hooks/useAuth";
+import { api } from "../lib/api";
+import { toast } from "react-hot-toast";
 
 const CATEGORIES = ["Frontend", "Backend", "DevOps", "QA", "Others"]; 
 
@@ -14,6 +16,8 @@ export default function CreatePost() {
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [featuredImage, setFeaturedImage] = useState("");
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   // Hide page scrollbar while on the Create page
   useEffect(() => {
@@ -22,6 +26,52 @@ export default function CreatePost() {
       document.body.classList.remove("no-scrollbar");
     };
   }, []);
+
+  const onPickFile = () => fileInputRef.current?.click();
+
+  const onFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate type: only JPG/JPEG/PNG
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Only JPG, JPEG or PNG images are allowed");
+      e.target.value = "";
+      return;
+    }
+
+    // Validate size: max 1 MB
+    const MAX_BYTES = 1 * 1024 * 1024; // 1MB
+    if (file.size > MAX_BYTES) {
+      toast.error("Max file size is 1 MB");
+      e.target.value = "";
+      return;
+    }
+
+    // Upload
+    const formData = new FormData();
+    formData.append("image", file);
+
+    setUploading(true);
+    try {
+      const res = await api.post("/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      const url = res?.url;
+      const message = res?.message || "Image uploaded successfully";
+      if (url) {
+        setFeaturedImage(url);
+        toast.success(message);
+      } else {
+        toast.error("Upload failed: No URL returned");
+      }
+    } finally {
+      setUploading(false);
+      // reset so same file can be selected again if needed
+      if (e?.target) e.target.value = "";
+    }
+  };
 
   const submit = async () => {
     if (!title) return;
@@ -59,8 +109,40 @@ export default function CreatePost() {
             </select>
           </div>
           <div>
-            <label htmlFor="featuredImage" className="block text-sm font-medium text-slate-700">Featured image URL (optional)</label>
-            <input id="featuredImage" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-green-500 focus:outline-none" value={featuredImage} onChange={(e)=>setFeaturedImage(e.target.value)} placeholder="https://..." />
+            <label htmlFor="featuredImageUpload" className="block text-sm font-medium text-slate-700">Upload Featured Image (optional)</label>
+            <div className="mt-1">
+              {/* Hidden file input */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                id="featuredImageUpload"
+                accept="image/png,image/jpeg"
+                onChange={onFileChange}
+                className="hidden"
+              />
+
+              {featuredImage ? (
+                <div className="rounded-md border border-slate-200 p-3 flex items-start gap-3">
+                  <img src={featuredImage} alt="Featured" className="h-20 w-20 rounded object-cover shrink-0" />
+                  <div className="flex-1">
+                    <div className="text-sm text-slate-600 mb-2">Image uploaded</div>
+                    <div className="flex gap-2">
+                      <button type="button" onClick={onPickFile} className="rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 cursor-pointer">Replace</button>
+                      <button type="button" onClick={() => setFeaturedImage("")} className="rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 cursor-pointer">Remove</button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={onPickFile}
+                  disabled={uploading}
+                  className="w-full justify-center rounded-md border border-dashed border-slate-300 px-4 py-6 text-slate-600 hover:bg-slate-50 disabled:opacity-60 cursor-pointer text-sm"
+                >
+                  {uploading ? "Uploading..." : "Click to upload JPG/PNG (max 1 MB)"}
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -70,10 +152,10 @@ export default function CreatePost() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button disabled={saving} onClick={submit} className="rounded-md border border-slate-300 px-4 py-2 text-slate-700 hover:bg-slate-50 disabled:opacity-60 cursor-pointer">
+          <button disabled={saving || uploading} onClick={submit} className="rounded-md border border-slate-300 px-4 py-2 text-slate-700 hover:bg-slate-50 disabled:opacity-60 cursor-pointer">
             {saving ? "Saving..." : "Save draft"}
           </button>
-          <button disabled={saving} onClick={submit} className="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-60 cursor-pointer">
+          <button disabled={saving || uploading} onClick={submit} className="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-60 cursor-pointer">
             {saving ? "Publishing..." : "Publish"}
           </button>
         </div>
