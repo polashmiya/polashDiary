@@ -39,7 +39,7 @@ export default function BlogCard({ post, delay = 0 }) {
     >
   <Link to={`/post/${post.id}`} className="block aspect-video overflow-hidden bg-slate-100">
         <SmartImage
-          src={post.featuredImage}
+          src={post.featuredImage || post.imageUrl || ""}
           alt={post.title}
           className="h-full w-full"
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
