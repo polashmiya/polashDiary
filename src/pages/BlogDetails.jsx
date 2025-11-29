@@ -186,7 +186,8 @@ export default function BlogDetails() {
   return (
     <MotionArticle
       lang={isBn ? "bn" : "en"}
-      className="mx-auto max-w-3xl px-4 sm:px-6 py-8"
+      className="mx-auto max-w-3xl px-2 sm:px-6 py-8 w-full"
+      style={{overflowX: 'hidden', width: '100%', minWidth: 0}}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
@@ -239,16 +240,31 @@ export default function BlogDetails() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.35 }}
+        style={{wordBreak: 'break-word', width: '100%', minWidth: 0}}
       >
-        <div ref={contentRef}>
+        <div ref={contentRef} style={{wordBreak: 'break-word', width: '100%', minWidth: 0}}>
           {/^[\s]*</.test(post.content) ? (
             <div
               dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
+              style={{wordBreak: 'break-word', width: '100%', minWidth: 0}}
             />
           ) : (
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeHighlight]}
+              components={{
+                code({inline, className, children, ...props}) {
+                  return inline ? (
+                    <code className="rounded bg-slate-100 px-1.5 py-0.5 text-[0.85em]" style={{wordBreak: 'break-word', maxWidth: '100vw', overflowWrap: 'break-word'}}>{children}</code>
+                  ) : (
+                    <pre className="overflow-x-auto w-full rounded-lg bg-slate-100 p-2 my-2" style={{maxWidth: '100vw', minWidth: 0, overflowX: 'auto'}}>
+                      <code className={className} {...props} style={{display: 'inline-block', minWidth: '100%', wordBreak: 'normal', whiteSpace: 'pre', overflowX: 'auto'}}>
+                        {children}
+                      </code>
+                    </pre>
+                  );
+                }
+              }}
             >
               {post.content}
             </ReactMarkdown>

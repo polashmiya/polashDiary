@@ -29,12 +29,12 @@ export default function CodeBlock({ className, children, inline, ...props }) {
 
   if (inline) {
     return (
-      <code className="rounded bg-slate-100 px-1.5 py-0.5 text-[0.85em]">{children}</code>
+      <code className="rounded bg-slate-100 px-1.5 py-0.5 text-[0.85em]" style={{wordBreak: 'break-word'}}>{children}</code>
     );
   }
 
   return (
-    <div className="relative group">
+    <div className="relative group overflow-x-auto" style={{maxWidth: '100vw'}}>
       <button
         type="button"
         onClick={handleCopy}
@@ -52,8 +52,11 @@ export default function CodeBlock({ className, children, inline, ...props }) {
           borderRadius: 8,
           margin: 0,
           fontSize: "0.9rem",
+          overflowX: 'auto',
+          maxWidth: '100vw',
+          wordBreak: 'break-word',
         }}
-        codeTagProps={{ style: { fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace' } }}
+        codeTagProps={{ style: { fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace', wordBreak: 'break-word' } }}
         {...props}
       >
         {code}
