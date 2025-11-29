@@ -92,20 +92,36 @@ export default function CreatePost() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
-      <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Create a Post</h1>
+    <div className="mx-auto max-w-4xl px-2 sm:px-6 py-6 sm:py-8">
+      <h1 className="text-xl sm:text-3xl font-bold tracking-tight text-slate-900 text-center sm:text-left">Create a Post</h1>
 
-      <div className="mt-6 grid gap-4">
+      <form className="mt-6 grid gap-6" style={{ width: "100%" }}>
+        {/* Title */}
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-slate-700">Title</label>
-          <input id="title" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-green-500 focus:outline-none" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="Your amazing title" />
+          <input
+            id="title"
+            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-green-500 focus:outline-none text-base sm:text-lg"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Your amazing title"
+            autoComplete="off"
+          />
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2">
+        {/* Category & Image Upload */}
+        <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="category" className="block text-sm font-medium text-slate-700">Category</label>
-            <select id="category" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-green-500 focus:outline-none" value={category} onChange={(e)=>setCategory(e.target.value)}>
-              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+            <select
+              id="category"
+              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:border-green-500 focus:outline-none text-base"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {CATEGORIES.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
             </select>
           </div>
           <div>
@@ -122,13 +138,13 @@ export default function CreatePost() {
               />
 
               {featuredImage ? (
-                <div className="rounded-md border border-slate-200 p-3 flex items-start gap-3">
-                  <img src={featuredImage} alt="Featured" className="h-20 w-20 rounded object-cover shrink-0" />
-                  <div className="flex-1">
+                <div className="rounded-md border border-slate-200 p-3 flex flex-col sm:flex-row items-start gap-3">
+                  <img src={featuredImage} alt="Featured" className="h-20 w-20 rounded object-cover shrink-0 mb-2 sm:mb-0" />
+                  <div className="flex-1 w-full">
                     <div className="text-sm text-slate-600 mb-2">Image uploaded</div>
-                    <div className="flex gap-2">
-                      <button type="button" onClick={onPickFile} className="rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 cursor-pointer">Replace</button>
-                      <button type="button" onClick={() => setFeaturedImage("")} className="rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 cursor-pointer">Remove</button>
+                    <div className="flex flex-col sm:flex-row gap-2 w-full">
+                      <button type="button" onClick={onPickFile} className="rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 cursor-pointer w-full sm:w-auto">Replace</button>
+                      <button type="button" onClick={() => setFeaturedImage("")} className="rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 cursor-pointer w-full sm:w-auto">Remove</button>
                     </div>
                   </div>
                 </div>
@@ -146,12 +162,17 @@ export default function CreatePost() {
           </div>
         </div>
 
-        <div>
-      <div className="block text-sm font-medium text-slate-700 mb-2">Content</div>
-      <PostEditor value={html} onChange={setHtml} />
+        {/* Content Editor */}
+        <div style={{ width: "100%", overflow: "hidden" }}>
+          <div className="block text-sm font-medium text-slate-700 mb-2">Content</div>
+          <div className="rounded-lg border border-slate-200 bg-white shadow-sm" style={{ width: "100%", overflow: "hidden" }}>
+            <PostEditor value={html} onChange={setHtml} />
+          </div>
         </div>
 
+        {/* Action Buttons */}
         <div className="flex items-center gap-3">
+          {/* ...existing code... */}
           <button disabled={saving || uploading} onClick={submit} className="rounded-md border border-slate-300 px-4 py-2 text-slate-700 hover:bg-slate-50 disabled:opacity-60 cursor-pointer">
             {saving ? "Saving..." : "Save draft"}
           </button>
@@ -159,7 +180,7 @@ export default function CreatePost() {
             {saving ? "Publishing..." : "Publish"}
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
