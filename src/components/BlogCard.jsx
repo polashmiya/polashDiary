@@ -46,7 +46,7 @@ export default function BlogCard({ post, delay = 0 }) {
           imgProps={{ className: "hover:scale-[1.02] transition-transform" }}
         />
       </Link>
-      <div className="p-4 flex flex-col flex-1">
+      <div className="px-4 flex flex-col flex-1">
         <div className="mb-2 flex items-center gap-2 text-xs text-slate-500">
           <span className="inline-block rounded bg-slate-100 px-2 py-0.5 text-slate-700">{post.category}</span>
           <span>•</span>

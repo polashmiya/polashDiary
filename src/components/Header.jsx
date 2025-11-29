@@ -7,7 +7,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-slate-200">
-      <div className="mx-auto max-w-6xl px-2 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="flex h-16 items-center justify-between flex-wrap">
           <Link to="/" className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 whitespace-nowrap">
             <span className="text-green-600">Polash</span> Diary

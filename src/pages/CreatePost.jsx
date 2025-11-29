@@ -92,7 +92,7 @@ export default function CreatePost() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-2 sm:px-6 py-6 sm:py-8">
+    <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 sm:py-8">
       <h1 className="text-xl sm:text-3xl font-bold tracking-tight text-slate-900 text-center sm:text-left">Create a Post</h1>
 
       <form className="mt-6 grid gap-6" style={{ width: "100%" }}>

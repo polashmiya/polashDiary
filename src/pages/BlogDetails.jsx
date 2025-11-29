@@ -186,7 +186,7 @@ export default function BlogDetails() {
   return (
     <MotionArticle
       lang={isBn ? "bn" : "en"}
-      className="mx-auto max-w-3xl px-2 sm:px-6 py-8 w-full"
+      className="mx-auto max-w-3xl px-4 sm:px-6 py-8 w-full"
       style={{overflowX: 'hidden', width: '100%', minWidth: 0}}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
